@@ -453,16 +453,66 @@ const DemoPage = ({ onBack }) => {
           details,
         });
       } else if (selectedService === 'face-matching') {
-        await new Promise((r) => setTimeout(r, 1200));
+        const formData = new FormData();
+        formData.append('file1', files[0], files[0].name || 'file1.jpg');
+        formData.append('file2', files[1], files[1].name || 'file2.jpg');
+
+        const response = await fetch('https://replit.com/@garibishahla/railway-deploy/compare', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const contentType = response.headers.get('content-type') || '';
+        let data = {};
+
+        if (contentType.includes('application/json')) {
+          data = await response.json();
+        } else {
+          const text = await response.text();
+          data = text ? { response: text.slice(0, 500) } : {};
+        }
+
+        if (!response.ok) {
+          throw new Error(data.detail || data.message || data.error || `Face matching failed (${response.status})`);
+        }
+
+        const similarity =
+          data.similarity ??
+          data.similarity_score ??
+          data.score ??
+          data.confidence ??
+          data.distance;
+        const matched = data.match ?? data.matched ?? data.verified ?? data.is_match;
+        const details = [];
+
+        if (similarity !== undefined) {
+          const numericSimilarity = Number(similarity);
+          details.push({
+            label: 'Similarity score',
+            value: Number.isFinite(numericSimilarity)
+              ? `${numericSimilarity <= 1 ? (numericSimilarity * 100).toFixed(1) : numericSimilarity.toFixed(1)}%`
+              : String(similarity),
+          });
+        }
+
+        if (matched !== undefined) {
+          details.push({ label: 'Result', value: matched ? 'Verified' : 'Not verified' });
+        }
+
+        Object.entries(data).forEach(([key, value]) => {
+          if (value === null || value === undefined) return;
+          if (['similarity', 'similarity_score', 'score', 'confidence', 'distance', 'match', 'matched', 'verified', 'is_match'].includes(key)) return;
+          const formatted = typeof value === 'object' ? JSON.stringify(value) : String(value);
+          details.push({
+            label: key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
+            value: formatted,
+          });
+        });
         setResult({
-          status: 'success',
-          title: 'Faces Match',
-          message: 'Demo result — connect your face-matching API for live output.',
-          details: [
-            { label: 'Similarity score', value: '94.2%' },
-            { label: 'Match threshold', value: '85%' },
-            { label: 'Result', value: 'Verified' },
-          ],
+          status: matched === false ? 'warning' : 'success',
+          title: matched === false ? 'Faces Do Not Match' : 'Face Matching Complete',
+          message: 'Face matching completed successfully.',
+          details,
         });
       } else if (selectedService === 'ocr') {
         await new Promise((r) => setTimeout(r, 1200));
@@ -534,21 +584,21 @@ const DemoPage = ({ onBack }) => {
             <button
               key={item.id}
               onClick={() => handleServiceChange(item.id)}
-              className={`p-5 rounded-xl border text-center flex flex-col items-center transition-all ${
+              className={`min-w-0 overflow-hidden p-3 sm:p-5 rounded-xl border text-center flex flex-col items-center transition-all ${
                 selectedService === item.id
                   ? 'border-cyan-500 bg-cyan-500/10'
                   : 'border-slate-800 bg-slate-900/50 hover:border-slate-600'
               }`}
             >
-              <div className="mb-3 h-36 w-36 shrink-0 flex items-center justify-center">
+              <div className="mb-3 flex aspect-square w-full max-w-[7.5rem] sm:max-w-36 shrink-0 items-center justify-center overflow-hidden">
                 <img
                   src={item.icon}
                   alt=""
-                  className="h-full w-full object-contain object-center"
+                  className="max-h-full max-w-full object-contain object-center"
                   style={{ transform: `scale(${item.iconScale ?? 1})` }}
                 />
               </div>
-              <div className="font-semibold text-sm">{item.title}</div>
+              <div className="text-xs sm:text-sm font-semibold leading-snug">{item.title}</div>
             </button>
           ))}
         </div>
@@ -580,7 +630,7 @@ const DemoPage = ({ onBack }) => {
                     </label>
                   ) : (
                     <div className="relative">
-                      <img src={previews[index]} alt={`Upload ${index + 1}`} className="w-full h-56 object-cover rounded-xl" />
+                      <img src={previews[index]} alt={`Upload ${index + 1}`} className="w-full h-48 sm:h-56 object-contain bg-slate-950 rounded-xl" />
                       <button
                         onClick={() => removeFile(index)}
                         className="absolute top-3 right-3 bg-black/70 hover:bg-black p-2 rounded-full"
