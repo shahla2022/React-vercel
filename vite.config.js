@@ -12,6 +12,12 @@ export default defineConfig({
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
+      '/api/face-match': {
+        target: 'https://replit.com',
+        changeOrigin: true,
+        secure: true,
+        rewrite: () => '/@garibishahla/railway-deploy/compare',
+      },
     },
   },
 })

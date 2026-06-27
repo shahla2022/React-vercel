@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/face-match",
+      "destination": "https://replit.com/@garibishahla/railway-deploy/compare"
+    }
+  ]
+}

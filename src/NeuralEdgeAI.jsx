@@ -1,9 +1,125 @@
 
 import React, { useState } from 'react';
-import { Upload, X, CheckCircle, XCircle, Sparkles, ArrowRight, ArrowLeft, Brain, FileImage } from 'lucide-react';
+import { Upload, X, CheckCircle, XCircle, Sparkles, ArrowRight, ArrowLeft, Brain, FileImage, Languages } from 'lucide-react';
 
-const KYCModulesPage = ({ onBack }) => {
+const COPY = {
+  en: {
+    languageButton: 'فارسی',
+    backHome: 'Back to Home',
+    navServices: 'Services',
+    navBlog: 'Blog',
+    navAbout: 'About us',
+    navContact: 'Contact',
+    heroLine1: 'Transform Your Business',
+    heroLine2: 'With AI Intelligence',
+    heroText: 'We deliver cutting-edge artificial intelligence solutions that drive innovation, enhance efficiency, and unlock unprecedented growth for your organization.',
+    heroCta: 'Start Your AI Journey',
+    heroDemo: 'View Demo',
+    servicesTitle: 'Our AI Solutions',
+    servicesText: 'Comprehensive artificial intelligence services tailored to your business needs',
+    medicalTitle: 'Medical Projects',
+    medicalText: 'Advanced AI solutions for healthcare and medical imaging. From diagnosis assistance to patient data analysis, we provide cutting-edge technology for the medical field.',
+    kycText: 'Know Your Customer solutions with AI-powered identity verification, face detection, and document authentication to ensure secure and compliant onboarding.',
+    learnMore: 'Learn more',
+    aboutTitle: 'Leading the AI Revolution',
+    aboutText: 'We are a team of AI researchers, data scientists, and engineers passionate about building intelligent systems that solve real-world problems.',
+    aboutPoints: ['Cutting-edge research and development', 'Industry-leading AI expertise', 'Proven track record of success', 'End-to-end AI implementation'],
+    contactTitle: "Let's Build the Future Together",
+    contactText: 'Ready to transform your business with AI? Get in touch with our team of experts.',
+    name: 'Name',
+    email: 'Email',
+    message: 'Message',
+    namePlaceholder: 'Your name',
+    emailPlaceholder: 'your@email.com',
+    messagePlaceholder: 'Tell us about your project...',
+    sendMessage: 'Send Message',
+    demoBadge: 'Interactive Demo',
+    demoTitlePrefix: 'Try Our',
+    demoTitleHighlight: 'AI Services',
+    demoText: 'Choose a service, upload your image, and see instant AI results.',
+    photo: 'Photo',
+    uploadHint: 'PNG, JPG up to 10MB',
+    runAnalysis: 'Run Analysis',
+    analyzing: 'Analyzing...',
+    results: 'Results',
+    emptyResults: 'Upload an image and click Run Analysis to see results here.',
+    processing: 'Processing your image...',
+    reset: 'Try Another Image',
+    kycBadge: 'Complete KYC Solution',
+    kycTitle: 'KYC Verification',
+    kycSubtitle: 'AI Modules',
+    kycIntro: 'Comprehensive identity verification powered by cutting-edge artificial intelligence. Secure, fast, and compliant with global standards.',
+  },
+  fa: {
+    languageButton: 'English',
+    backHome: 'بازگشت به خانه',
+    navServices: 'خدمات',
+    navBlog: 'بلاگ',
+    navAbout: 'درباره ما',
+    navContact: 'تماس',
+    heroLine1: 'کسب‌وکار خود را متحول کنید',
+    heroLine2: 'با هوش مصنوعی',
+    heroText: 'ما راهکارهای پیشرفته هوش مصنوعی ارائه می‌دهیم تا نوآوری، بهره‌وری و رشد پایدار برای سازمان شما ایجاد شود.',
+    heroCta: 'شروع مسیر هوش مصنوعی',
+    heroDemo: 'مشاهده دمو',
+    servicesTitle: 'راهکارهای هوش مصنوعی ما',
+    servicesText: 'خدمات جامع هوش مصنوعی متناسب با نیازهای کسب‌وکار شما',
+    medicalTitle: 'پروژه‌های پزشکی',
+    medicalText: 'راهکارهای پیشرفته هوش مصنوعی برای سلامت و تصویربرداری پزشکی؛ از کمک به تشخیص تا تحلیل داده‌های بیمار.',
+    kycText: 'راهکارهای احراز هویت مشتری با تشخیص چهره، تطبیق چهره و اعتبارسنجی مدارک برای ورود امن و سازگار.',
+    learnMore: 'بیشتر بدانید',
+    aboutTitle: 'پیشرو در تحول هوش مصنوعی',
+    aboutText: 'ما تیمی از پژوهشگران، دانشمندان داده و مهندسان هوش مصنوعی هستیم که برای حل مسائل واقعی سیستم‌های هوشمند می‌سازیم.',
+    aboutPoints: ['پژوهش و توسعه پیشرفته', 'تخصص حرفه‌ای در هوش مصنوعی', 'سابقه موفق در پروژه‌ها', 'پیاده‌سازی کامل از ابتدا تا اجرا'],
+    contactTitle: 'آینده را با هم بسازیم',
+    contactText: 'برای تحول کسب‌وکار خود با هوش مصنوعی، با تیم متخصص ما در ارتباط باشید.',
+    name: 'نام',
+    email: 'ایمیل',
+    message: 'پیام',
+    namePlaceholder: 'نام شما',
+    emailPlaceholder: 'your@email.com',
+    messagePlaceholder: 'درباره پروژه خود بنویسید...',
+    sendMessage: 'ارسال پیام',
+    demoBadge: 'دموی تعاملی',
+    demoTitlePrefix: 'سرویس‌های',
+    demoTitleHighlight: 'هوش مصنوعی',
+    demoText: 'یک سرویس انتخاب کنید، تصویر خود را آپلود کنید و نتیجه را بلافاصله ببینید.',
+    photo: 'تصویر',
+    uploadHint: 'PNG یا JPG تا ۱۰ مگابایت',
+    runAnalysis: 'اجرای تحلیل',
+    analyzing: 'در حال تحلیل...',
+    results: 'نتایج',
+    emptyResults: 'یک تصویر آپلود کنید و روی اجرای تحلیل بزنید تا نتیجه اینجا نمایش داده شود.',
+    processing: 'در حال پردازش تصویر...',
+    reset: 'آزمایش تصویر دیگر',
+    kycBadge: 'راهکار کامل KYC',
+    kycTitle: 'احراز هویت KYC',
+    kycSubtitle: 'ماژول‌های هوش مصنوعی',
+    kycIntro: 'احراز هویت جامع با هوش مصنوعی پیشرفته؛ امن، سریع و سازگار با استانداردهای جهانی.',
+  },
+};
+
+const getCopy = (language) => COPY[language] || COPY.en;
+
+const LanguageToggle = ({ language, onToggle }) => {
+  const copy = getCopy(language);
+
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      className="fixed right-4 top-4 z-[70] inline-flex items-center gap-2 rounded-lg border border-cyan-500/40 bg-slate-950/90 px-3 py-2 text-sm font-medium text-white shadow-lg shadow-cyan-950/30 backdrop-blur-md transition-colors hover:border-cyan-300 hover:bg-slate-900"
+      aria-label="Change language"
+    >
+      <Languages className="h-4 w-4 text-cyan-300" />
+      <span>{copy.languageButton}</span>
+    </button>
+  );
+};
+
+const KYCModulesPage = ({ onBack, language }) => {
   const [selectedModule, setSelectedModule] = useState(null);
+  const copy = getCopy(language);
 
   const modules = [
     {
@@ -96,26 +212,25 @@ const KYCModulesPage = ({ onBack }) => {
           className="max-w-7xl mx-auto mb-8 flex items-center space-x-2 text-slate-400 hover:text-cyan-400 transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
-          <span>Back to Home</span>
+          <span>{copy.backHome}</span>
         </button>
 
         <div className="max-w-7xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900/50 border border-cyan-500/30 rounded-full text-sm text-slate-300 mb-6">
             <Sparkles className="w-4 h-4 text-cyan-400" />
-            <span>Complete KYC Solution</span>
+            <span>{copy.kycBadge}</span>
           </div>
           
           <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            <span className="text-white">KYC Verification</span>
+            <span className="text-white">{copy.kycTitle}</span>
             <br />
             <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
-              AI Modules
+              {copy.kycSubtitle}
             </span>
           </h1>
           
           <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-            Comprehensive identity verification powered by cutting-edge artificial intelligence.
-            Secure, fast, and compliant with global standards.
+            {copy.kycIntro}
           </p>
         </div>
       </div>
@@ -276,14 +391,44 @@ const DEMO_SERVICES = [
   },
 ];
 
-const DemoPage = ({ onBack }) => {
+const DEMO_SERVICE_COPY = {
+  fa: {
+    'face-detection': {
+      title: 'تشخیص چهره',
+      description: 'تشخیص و مکان‌یابی چهره‌ها در تصویر.',
+      uploadLabel: 'یک عکس دارای چهره آپلود کنید',
+    },
+    'face-matching': {
+      title: 'تطبیق چهره',
+      description: 'دو چهره را مقایسه کنید و امتیاز شباهت بگیرید.',
+      uploadLabel: 'دو عکس برای مقایسه آپلود کنید',
+    },
+    antispoof: {
+      title: 'تشخیص جعل',
+      description: 'حملات عکس، ویدیو یا ماسک را تشخیص دهید.',
+      uploadLabel: 'یک عکس برای بررسی آپلود کنید',
+    },
+    ocr: {
+      title: 'استخراج متن',
+      description: 'متن کارت شناسایی و مدارک را استخراج کنید.',
+      uploadLabel: 'تصویر مدرک را آپلود کنید',
+    },
+  },
+};
+
+const DemoPage = ({ onBack, language }) => {
   const [selectedService, setSelectedService] = useState('antispoof');
   const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+  const copy = getCopy(language);
 
-  const service = DEMO_SERVICES.find((s) => s.id === selectedService);
+  const localizedServices = DEMO_SERVICES.map((item) => ({
+    ...item,
+    ...(DEMO_SERVICE_COPY[language]?.[item.id] || {}),
+  }));
+  const service = localizedServices.find((s) => s.id === selectedService);
 
   const resetUploads = () => {
     setResult((prev) => {
@@ -457,7 +602,7 @@ const DemoPage = ({ onBack }) => {
         formData.append('file1', files[0], files[0].name || 'file1.jpg');
         formData.append('file2', files[1], files[1].name || 'file2.jpg');
 
-        const response = await fetch('https://replit.com/@garibishahla/railway-deploy/compare', {
+        const response = await fetch('/api/face-match', {
           method: 'POST',
           body: formData,
         });
@@ -563,24 +708,24 @@ const DemoPage = ({ onBack }) => {
           className="mb-8 flex items-center space-x-2 text-slate-400 hover:text-cyan-400 transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
-          <span>Back to Home</span>
+          <span>{copy.backHome}</span>
         </button>
 
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900/50 border border-cyan-500/30 rounded-full text-sm text-slate-300 mb-6">
             <Sparkles className="w-4 h-4 text-cyan-400" />
-            <span>Interactive Demo</span>
+            <span>{copy.demoBadge}</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Try Our <span className="bg-gradient-to-r from-cyan-400 to-purple-600 bg-clip-text text-transparent">AI Services</span>
+            {copy.demoTitlePrefix} <span className="bg-gradient-to-r from-cyan-400 to-purple-600 bg-clip-text text-transparent">{copy.demoTitleHighlight}</span>
           </h1>
           <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-            Choose a service, upload your image, and see instant AI results.
+            {copy.demoText}
           </p>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10">
-          {DEMO_SERVICES.map((item) => (
+          {localizedServices.map((item) => (
             <button
               key={item.id}
               onClick={() => handleServiceChange(item.id)}
@@ -612,7 +757,7 @@ const DemoPage = ({ onBack }) => {
               {Array.from({ length: service?.uploads || 1 }).map((_, index) => (
                 <div key={index}>
                   {service?.uploads === 2 && (
-                    <p className="text-sm text-slate-400 mb-2">Photo {index + 1}</p>
+                    <p className="text-sm text-slate-400 mb-2">{copy.photo} {index + 1}</p>
                   )}
                   {!previews[index] ? (
                     <label className="block cursor-pointer">
@@ -625,7 +770,7 @@ const DemoPage = ({ onBack }) => {
                       <div className="border-2 border-dashed border-slate-700 rounded-xl p-10 text-center hover:border-cyan-500 hover:bg-cyan-500/5 transition-all">
                         <Upload className="w-12 h-12 mx-auto mb-3 text-cyan-400" />
                         <p className="font-medium mb-1">{service?.uploadLabel}</p>
-                        <p className="text-slate-500 text-sm">PNG, JPG up to 10MB</p>
+                        <p className="text-slate-500 text-sm">{copy.uploadHint}</p>
                       </div>
                     </label>
                   ) : (
@@ -656,28 +801,28 @@ const DemoPage = ({ onBack }) => {
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
                   <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                  Analyzing...
+                  {copy.analyzing}
                 </span>
               ) : (
-                'Run Analysis'
+                copy.runAnalysis
               )}
             </button>
           </div>
 
           <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-8">
-            <h2 className="text-2xl font-bold mb-6">Results</h2>
+            <h2 className="text-2xl font-bold mb-6">{copy.results}</h2>
 
             {!result && !loading && (
               <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-center text-slate-500">
                 <Brain className="w-16 h-16 mb-4 text-slate-700" />
-                <p>Upload an image and click Run Analysis to see results here.</p>
+                <p>{copy.emptyResults}</p>
               </div>
             )}
 
             {loading && (
               <div className="min-h-[300px] flex flex-col items-center justify-center text-slate-400">
                 <div className="w-12 h-12 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin mb-4"></div>
-                <p>Processing your image...</p>
+                <p>{copy.processing}</p>
               </div>
             )}
 
@@ -720,7 +865,7 @@ const DemoPage = ({ onBack }) => {
                   onClick={resetUploads}
                   className="mt-6 w-full py-3 bg-slate-800 hover:bg-slate-700 rounded-lg font-medium transition-all"
                 >
-                  Try Another Image
+                  {copy.reset}
                 </button>
               </div>
             )}
@@ -924,7 +1069,12 @@ const PhotoUploadPage = ({ onBack }) => {
 
 const NeuralEdgeAI = () => {
   const [currentPage, setCurrentPage] = useState('home');
+  const [language, setLanguage] = useState('en');
   const contactEmail = 'shahla_garibi@yahoo.com';
+  const copy = getCopy(language);
+  const isPersian = language === 'fa';
+  const toggleLanguage = () => setLanguage((current) => (current === 'en' ? 'fa' : 'en'));
+  const languageToggle = <LanguageToggle language={language} onToggle={toggleLanguage} />;
 
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
@@ -953,30 +1103,46 @@ const NeuralEdgeAI = () => {
   };
 
   if (currentPage === 'kyc-modules') {
-    return <KYCModulesPage onBack={() => setCurrentPage('home')} />;
+    return (
+      <div dir={isPersian ? 'rtl' : 'ltr'}>
+        {languageToggle}
+        <KYCModulesPage language={language} onBack={() => setCurrentPage('home')} />
+      </div>
+    );
   }
 
   if (currentPage === 'demo') {
-    return <DemoPage onBack={() => setCurrentPage('home')} />;
+    return (
+      <div dir={isPersian ? 'rtl' : 'ltr'}>
+        {languageToggle}
+        <DemoPage language={language} onBack={() => setCurrentPage('home')} />
+      </div>
+    );
   }
 
   if (currentPage === 'computer-vision') {
-    return <PhotoUploadPage onBack={() => setCurrentPage('home')} />;
+    return (
+      <div dir={isPersian ? 'rtl' : 'ltr'}>
+        {languageToggle}
+        <PhotoUploadPage onBack={() => setCurrentPage('home')} />
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div dir={isPersian ? 'rtl' : 'ltr'} className="min-h-screen bg-slate-950">
+      {languageToggle}
       <nav className="fixed top-0 w-full z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800/50">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-6 py-4 pr-32 flex items-center justify-between">
           <div className="flex items-center">
             <img src="/imgs/logo.png" alt="Logo" className="h-16 md:h-20 w-auto object-contain" />
           </div>
           
           <div className="flex items-center gap-8">
-            <button onClick={() => scrollToSection('services')} className="text-slate-300 hover:text-white transition-colors cursor-pointer">Services</button>
-            <button onClick={() => scrollToSection('products')} className="text-slate-300 hover:text-white transition-colors cursor-pointer">Blog</button>
-            <button onClick={() => scrollToSection('about')} className="text-slate-300 hover:text-white transition-colors cursor-pointer">About us</button>
-            <button onClick={() => scrollToSection('contact')} className="text-slate-300 hover:text-white transition-colors cursor-pointer">Contact</button>
+            <button onClick={() => scrollToSection('services')} className="text-slate-300 hover:text-white transition-colors cursor-pointer">{copy.navServices}</button>
+            <button onClick={() => scrollToSection('products')} className="text-slate-300 hover:text-white transition-colors cursor-pointer">{copy.navBlog}</button>
+            <button onClick={() => scrollToSection('about')} className="text-slate-300 hover:text-white transition-colors cursor-pointer">{copy.navAbout}</button>
+            <button onClick={() => scrollToSection('contact')} className="text-slate-300 hover:text-white transition-colors cursor-pointer">{copy.navContact}</button>
             {/* <button className="px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-lg text-white font-medium hover:shadow-lg hover:shadow-cyan-500/50 transition-all">
               Get Started
             </button> */}
@@ -997,27 +1163,26 @@ const NeuralEdgeAI = () => {
           {/* </div> */}
 
           <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold leading-tight">
-            <div className="text-white">Transform Your Business</div>
+            <div className="text-white">{copy.heroLine1}</div>
             <div className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
-              With AI Intelligence
+              {copy.heroLine2}
             </div>
           </h1>
 
           <p className="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
-            We deliver cutting-edge artificial intelligence solutions that drive innovation,
-            enhance efficiency, and unlock unprecedented growth for your organization.
+            {copy.heroText}
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <button className="group px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-lg text-white font-medium hover:shadow-lg hover:shadow-cyan-500/50 transition-all flex items-center gap-2">
-              Start Your AI Journey
+              {copy.heroCta}
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
             <button
               onClick={() => setCurrentPage('demo')}
               className="px-8 py-4 bg-white text-slate-900 rounded-lg font-medium hover:bg-slate-100 transition-all"
             >
-              View Demo
+              {copy.heroDemo}
             </button>
           </div>
         </div>
@@ -1026,9 +1191,9 @@ const NeuralEdgeAI = () => {
       <section id="services" className="py-24 px-6 bg-slate-950">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold text-white mb-4">Our AI Solutions</h2>
+            <h2 className="text-5xl font-bold text-white mb-4">{copy.servicesTitle}</h2>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-              Comprehensive artificial intelligence services tailored to your business needs
+              {copy.servicesText}
             </p>
           </div>
 
@@ -1037,12 +1202,12 @@ const NeuralEdgeAI = () => {
               <div className="mb-6">
                 <img src="/imgs/medical.png" alt="" className="w-[500px] h-[300px] object-contain" />
               </div>
-              <h3 className="text-3xl font-bold text-white mb-4">Medical Projects</h3>
+              <h3 className="text-3xl font-bold text-white mb-4">{copy.medicalTitle}</h3>
               <p className="text-slate-400 mb-6 leading-relaxed text-lg">
-                Advanced AI solutions for healthcare and medical imaging. From diagnosis assistance to patient data analysis, we provide cutting-edge technology for the medical field.
+                {copy.medicalText}
               </p>
               <a href="#" className="inline-flex items-center gap-2 text-cyan-400 hover:gap-3 transition-all text-lg">
-                Learn more
+                {copy.learnMore}
                 <ArrowRight className="w-5 h-5" />
               </a>
             </div>
@@ -1054,10 +1219,10 @@ const NeuralEdgeAI = () => {
               </div>
               <h3 className="text-3xl font-bold text-white mb-4">KYC</h3>
               <p className="text-slate-400 mb-6 leading-relaxed text-lg">
-                Know Your Customer solutions with AI-powered identity verification, face detection, and document authentication to ensure secure and compliant onboarding.
+                {copy.kycText}
               </p>
               <span className="inline-flex items-center gap-2 text-cyan-400 hover:gap-3 transition-all text-lg">
-                Learn more
+                {copy.learnMore}
                 <ArrowRight className="w-5 h-5" />
               </span>
             </div>
@@ -1069,13 +1234,13 @@ const NeuralEdgeAI = () => {
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-5xl font-bold text-white mb-6">Leading the AI Revolution</h2>
+              <h2 className="text-5xl font-bold text-white mb-6">{copy.aboutTitle}</h2>
               <p className="text-xl text-slate-400 mb-8 leading-relaxed">
-                We are a team of AI researchers, data scientists, and engineers passionate about building intelligent systems that solve real-world problems.
+                {copy.aboutText}
               </p>
 
               <div className="space-y-4 mb-8">
-                {['Cutting-edge research and development', 'Industry-leading AI expertise', 'Proven track record of success', 'End-to-end AI implementation'].map((item, idx) => (
+                {copy.aboutPoints.map((item, idx) => (
                   <div key={idx} className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
                       <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1103,10 +1268,10 @@ const NeuralEdgeAI = () => {
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             <div>
-              <h2 className="text-5xl font-bold text-white mb-6">Let's Build the Future Together</h2>
+              <h2 className="text-5xl font-bold text-white mb-6">{copy.contactTitle}</h2>
               <p className="text-xl text-slate-400 mb-12 leading-relaxed">
                 
-                Ready to transform your business with AI? Get in touch with our team of experts.
+                {copy.contactText}
               </p>
 
               <div className="space-y-6">
@@ -1130,22 +1295,22 @@ const NeuralEdgeAI = () => {
             <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-8">
               <form onSubmit={handleContactSubmit} className="space-y-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">Name</label>
-                  <input type="text" id="name" name="name" required placeholder="Your name" className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 transition-colors" />
+                  <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">{copy.name}</label>
+                  <input type="text" id="name" name="name" required placeholder={copy.namePlaceholder} className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 transition-colors" />
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">Email</label>
-                  <input type="email" id="email" name="email" required placeholder="your@email.com" className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 transition-colors" />
+                  <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">{copy.email}</label>
+                  <input type="email" id="email" name="email" required placeholder={copy.emailPlaceholder} className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 transition-colors" />
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-slate-300 mb-2">Message</label>
-                  <textarea id="message" name="message" rows="6" required placeholder="Tell us about your project..." className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 transition-colors resize-none"></textarea>
+                  <label htmlFor="message" className="block text-sm font-medium text-slate-300 mb-2">{copy.message}</label>
+                  <textarea id="message" name="message" rows="6" required placeholder={copy.messagePlaceholder} className="w-full px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 transition-colors resize-none"></textarea>
                 </div>
 
                 <button type="submit" className="w-full px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-lg text-white font-medium hover:shadow-lg hover:shadow-cyan-500/50 transition-all">
-                  Send Message
+                  {copy.sendMessage}
                 </button>
               </form>
             </div>
