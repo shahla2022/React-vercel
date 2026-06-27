@@ -1162,7 +1162,7 @@ const NeuralEdgeAI = () => {
             {/* <span>Powered by Advanced AI Technology</span> */}
           {/* </div> */}
 
-          <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold leading-tight">
+          <h1 className={`${isPersian ? 'text-4xl md:text-5xl lg:text-6xl' : 'text-6xl md:text-7xl lg:text-8xl'} font-bold leading-tight`}>
             <div className="text-white">{copy.heroLine1}</div>
             <div className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
               {copy.heroLine2}
