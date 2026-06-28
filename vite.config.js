@@ -13,15 +13,15 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
       '/api/face-match': {
-        target: 'https://replit.com',
+        target: 'https://',
         changeOrigin: true,
         secure: true,
-        rewrite: () => '/railway-deploy--garibishahla.replit.app/compare',
+        rewrite: () => 'railway-deploy--garibishahla.replit.app/compare',
       
         
       },
     },
   },
 })
-// https://railway-deploy--garibishahla.replit.app
+
 //'/@garibishahla/railway-deploy/compare'
