@@ -16,8 +16,12 @@ export default defineConfig({
         target: 'https://replit.com',
         changeOrigin: true,
         secure: true,
-        rewrite: () => '/@garibishahla/railway-deploy/compare',
+        rewrite: () => '//railway-deploy--garibishahla.replit.app/compare',
+      
+        
       },
     },
   },
 })
+// https://railway-deploy--garibishahla.replit.app
+//'/@garibishahla/railway-deploy/compare'
