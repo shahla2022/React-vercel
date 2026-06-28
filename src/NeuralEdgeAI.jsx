@@ -602,10 +602,12 @@ const DemoPage = ({ onBack, language }) => {
         formData.append('file1', files[0], files[0].name || 'file1.jpg');
         formData.append('file2', files[1], files[1].name || 'file2.jpg');
 
-        const response = await fetch('/api/face-match', {
+        const response = await fetch('https://railway-deploy--garibishahla.replit.app/compare', {
           method: 'POST',
           body: formData,
         });
+
+ 
 
         const contentType = response.headers.get('content-type') || '';
         let data = {};

@@ -12,14 +12,14 @@ export default defineConfig({
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
-      '/api/face-match': {
-         target: 'https://railway-deploy--garibishahla.replit.app',
-        changeOrigin: true,
-        secure: true,
-        rewrite: () => '/compare',
+      // '/api/face-match': {
+      //    target: 'https://railway-deploy--garibishahla.replit.app',
+      //   changeOrigin: true,
+      //   secure: true,
+      //   rewrite: () => '/compare',
       
         
-      },
+      // },
     },
   },
 })
