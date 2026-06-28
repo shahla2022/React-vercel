@@ -479,16 +479,12 @@ const NeuralEdgeAI = () => {
           </div>
 
           {/* Main heading */}
-          
-          <h1 className="font-bold leading-tight">
-            <div className="text-2xl md:text-3xl lg:text-4xl text-white">
-              Transform Your Business
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">
+            <div className="text-white">Transform Your Business</div>
+            <div className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent"  >
+              With AI Intelligence
             </div>
-
-            <div className="text-xl md:text-2xl lg:text-2xl bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
-                With AI Intelligence
-           </div>
-        </h1>
+          </h1>
 
           {/* Description */}
           <p className="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
